@@ -1,5 +1,7 @@
-import sys
+# alien_invasion.py
 import pygame
+import sys
+from pygame.sprite import Group
 import game_functions as gf
 from settings import Settings
 from ship import Ship
@@ -14,12 +16,21 @@ def run_game():
     # Make a ship.
     ship = Ship(ai_settings, screen)
 
-    # Start the main loop for the game.
-    while True:
-        # Watch for keyboard and mouse events.
-        gf.check_events(ship)  # Pass the ship object here
-        ship.update()  # Update ship position
-        # Redraw the screen.
-        gf.update_screen(ai_settings, screen, ship)
+    # Make a group to store bullets in.
+    bullets = Group()
 
-run_game()
+    # Start the main loop for the game.
+    print("Game is running...")
+    
+    while True:
+        gf.check_events(ship, ai_settings, screen, bullets)  # Handle user inputs
+        ship.update()  # Update ship position
+        bullets.update()  # Update bullets
+        gf.update_screen(ai_settings, screen, ship, bullets)  # Redraw the screen
+
+try:
+    run_game()
+except Exception as e:
+    print(f"An error occurred: {e}")
+    pygame.quit()
+    sys.exit()
